@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,20 +23,21 @@ import org.rzcode.rzcmp.dependencies.MyViewModel
 @Composable
 @Preview
 fun App(
-    batteryManager: BatteryManager
+    batteryManager: BatteryManager,
 ) {
     MaterialTheme {
 
         NavHost(
             navController = rememberNavController(),
-            startDestination = "Home"
-        ){
+            startDestination = "Home",
+        ) {
 
             composable(
-                route = "Home"
+                route = "Home",
             ) {
 
                 val viewModel = koinViewModel<MyViewModel>()
+                val samplePostTitle by viewModel.samplePostTitle.collectAsState()
                 val batteryLevel = remember { batteryManager.getBatteryLevel() }
 
                 Column(
@@ -43,21 +46,22 @@ fun App(
                         .safeContentPadding()
                         .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Center,
                 ) {
 
                     Text(
-                        text = "battery level is: $batteryLevel %"
+                        text = "battery level is: $batteryLevel %",
                     )
 
                     Text(
-                        text = viewModel.getHelloWorld()
+                        text = viewModel.getHelloWorld(),
                     )
 
+                    Text(
+                        text = "Sample API title: $samplePostTitle",
+                    )
                 }
-
             }
-
         }
     }
 }
